@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/registration.css">
+    <title th:text="${adminCreation ? 'Neuen Benutzer erstellen' : (editMode ? 'Profil bearbeiten' : 'Registrierung')}">
+        Registrierung</title>
+</head>
+<body>
+<h1 th:text="${adminCreation ? 'Neuen Benutzer erstellen' : (editMode ? 'Profil bearbeiten' : 'Registrierung')}">
+    Registrierung</h1>
+
+
+<div sec:authorize="hasRole('ADMIN')" th:if="${!adminCreation}">
+    <div class="alert alert-info">
+        <strong>Admin-Hinweis:</strong> Als Administrator können Sie neue Benutzer erstellen oder bestehende bearbeiten.
+    </div>
+</div>
+
+<div sec:authorize="hasRole('ADMIN')" th:if="${adminCreation}">
+    <div class="alert alert-info">
+        <strong>Admin-Hinweis:</strong> Sie erstellen einen neuen Benutzer.
+    </div>
+</div>
+
+<div sec:authorize="hasRole('USER')" th:if="${!adminCreation}">
+    <div class="alert alert-info">
+        <strong>Benutzer-Hinweis:</strong> Sie können Ihr Profil bearbeiten.
+    </div>
+</div>
+
+<div sec:authorize="isAnonymous()">
+    <div class="alert alert-info">
+        <strong>Registrieren Sie sich:</strong> Bitte geben Sie Ihre Daten ein, um sich zu registrieren.
+    </div>
+</div>
+
+<form th:action="${editMode && !adminCreation ? '/profile/update' : '/registration'}" method="post">
+    <input type="hidden" name="id" th:value="${user.id}" />
+
+    <label class="form-label">First Name :</label><br/>
+    <input class="form-control" th:value="${user.firstName}"
+           type="text" name="firstName" pattern="[A-Za-zÄÖÜäöüß\s-]{2,50}"
+           title="Bitte nur Buchstaben (min. 2, max. 50 Zeichen)" required/><br/>
+
+    <label class="form-label">Last Name :</label><br/>
+    <input class="form-control" th:value="${user.lastName}" type="text" name="lastName"
+           pattern="[A-Za-zÄÖÜäöüß\s-]{2,50}"
+           title="Bitte nur Buchstaben (min. 2, max. 50 Zeichen)" required/><br/>
+
+    <label class="form-label">E-Mail :</label><br/>
+    <input class="form-control" th:value="${user.email}" type="email" name="email" required/><br/>
+
+    <p th:if="${error=='email_exists'}">Diese E-Mail ist bereits vorhanden.</p>
+
+    <label class="form-label">Password :</label><br/>
+    <input class="form-control" type="password" name="password"
+           th:required="${!editMode || adminCreation}"
+           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{8,50}"
+           title="Bitte mindestens 8 Zeichen, ein Kleinbuchstabe, ein Großbuchstabe und eine Zahl enthalten"
+           autocomplete="off" />
+    <small th:if="${editMode && !adminCreation}" class="form-text text-muted">
+        Lassen Sie das Passwort leer, um das aktuelle beizubehalten</small><br/>
+
+    <div sec:authorize="hasRole('ADMIN')">
+        <div class="form-check">
+            <input type="radio" id="user" name="role" value="USER" class="form-check-input"
+                   th:checked="${user.role == null || user.role == 'USER'}">
+            <label for="user" class="form-check-label">Student</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="admin" name="role" value="ADMIN" class="form-check-input"
+                   th:checked="${user.role == 'ADMIN'}">
+            <label for="admin" class="form-check-label">Admin</label>
+        </div>
+    </div>
+
+    <div sec:authorize="!hasRole('ADMIN')">
+        <input type="hidden" name="role"
+               th:value="${user.role != null ? user.role : (isUsers ? 'USER' : 'ADMIN')}">
+    </div>
+
+    <button type="submit" th:text="${adminCreation ? 'Benutzer erstellen' : (editMode ? 'Speichern' : 'Registrieren')}">Submit</button>
+
+    <a th:if="${adminCreation}" th:href="@{/admin/users}" class="btn btn-secondary">Abbrechen</a>
+</form>
+
+<div th:if="${editMode && !adminCreation}">
+    <form th:action="@{/profile/delete}" method="post"
+          onsubmit="return confirm('Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.');">
+        <input type="hidden" name="userId" th:value="${user.id}" />
+        <button type="submit" class="btn btn-danger mt-3">Konto löschen</button>
+    </form>
+</div>
+
+</body>
+</html>

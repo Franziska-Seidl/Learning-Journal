@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/teachingClass.css">
+    <title>Klassenzimmer bearbeiten</title>
+</head>
+<body>
+<h1>Klassenzimmer bearbeiten</h1>
+
+<div th:if="${param.success}">
+    <div class="alert alert-success">Klassenzimmer erfolgreich aktualisiert</div>
+</div>
+
+<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+</div>
+
+<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}">
+</div>
+
+<div class="section">
+    <h2>Grundinformationen</h2>
+    <form th:action="@{/admin/teachingClass/update}" method="post" th:object="${teachingClass}">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="name">Klassenname:</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Änderungen speichern</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Schüler im Klassenzimmer</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>E-Mail</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${teachingClass.userList}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.firstName}">Hans</td>
+            <td th:text="${user.lastName}">Müller</td>
+            <td th:text="${user.email}">hans@example.com</td>
+            <td>
+                <form th:action="@{/admin/teachingClass/{classId}/removeUser(classId=${teachingClass.id})}" method="post" style="display: inline;">
+                    <input type="hidden" name="userId" th:value="${user.id}" />
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Sind Sie sicher, dass Sie diesen Schüler aus dem Klassenzimmer entfernen möchten?')">Aus Klasse entfernen</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="add-form">
+        <h3>Schüler zum Klassenzimmer hinzufügen</h3>
+        <form th:action="@{/admin/teachingClass/{classId}/addUser(classId=${teachingClass.id})}" method="post">
+            <div class="form-group">
+                <label for="userId">Schüler auswählen:</label>
+                <select id="userId" name="userId" class="form-control" required>
+                    <option value="">-- Schüler auswählen --</option>
+                    <option th:each="user : ${availableUsers}"
+                            th:value="${user.id}"
+                            th:text="${user.firstName + ' ' + user.lastName + ' (' + user.email + ')'}">
+                        Hans Müller (hans@example.com)
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Zur Klasse hinzufügen</button>
+        </form>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Themen im Klassenzimmer</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Themaname</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="topic : ${topicsInClass}">
+            <td th:text="${topic.id}">1</td>
+            <td th:text="${topic.name}">Mathematik</td>
+            <td>
+                <form th:action="@{/admin/teachingClass/{classId}/removeTopic(classId=${teachingClass.id})}" method="post" style="display: inline;">
+                    <input type="hidden" name="topicId" th:value="${topic.id}" />
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Sind Sie sicher, dass Sie dieses Thema aus dem Klassenzimmer entfernen möchten?')">Aus Klasse entfernen</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="add-form">
+        <h3>Thema zum Klassenzimmer hinzufügen</h3>
+        <form th:action="@{/admin/teachingClass/{classId}/addTopic(classId=${teachingClass.id})}" method="post">
+            <div class="form-group">
+                <label for="topicId">Thema auswählen:</label>
+                <select id="topicId" name="topicId" class="form-control" required>
+                    <option value="">-- Thema auswählen --</option>
+                    <option th:each="topic : ${availableTopics}"
+                            th:value="${topic.id}"
+                            th:text="${topic.name}">
+                        Mathematik
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Thema hinzufügen</button>
+        </form>
+    </div>
+</div>
+
+<div class="buttons">
+    <a th:href="@{/teachingClass}" class="btn btn-secondary">Zurück zur Klassenliste</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/login.css">
+    <title>Login bei Learning Journal</title>
+</head>
+
+<body>
+    <h1>Anmelden bei Learning Journal</h1>
+    <div class="container">
+        <form th:action="@{/login}" method="POST">
+            <div class="loginTitle">Login</div>
+            <input type="email" name="email" placeholder="E-mail" required><br>
+            <input type="password" name="password" placeholder="Passwort" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{8,50}" required><br>
+            <input type="submit" value="Anmelden">
+            <div class="containerLink">
+                <a th:href="@{/forgot-password}">Passwort vergessen</a>
+            </div>
+            <div class="containerLink">
+                <a th:href="@{/registration}">Registrierung</a>
+            </div>
+        </form>
+    </div>
+
+
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+
+</body>
+</html>
+
+
+
+
+

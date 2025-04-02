@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/topics.css">
+    <title>Themenübersicht</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="box">
+        <h1 class="headerBox">Neues Thema erstellen</h1>
+        <form id="classroomForm" th:action="@{/createTopic}" method="post">
+            <label for="name"><h2>Name des Themas</h2></label>
+            <input type="text" id="name" name="name" required><br>
+            <button class="zurück" id="submit" type="submit">Thema erstellen</button>
+
+            <input type="hidden" id="successMessage" name="successMessage" th:value="${successMessage}">
+            <input type="hidden" id="errorMessage" name="errorMessage" th:value="${errorMessage}">
+            <button class="zurück" onclick="window.location.href='http://localhost:8081/welcome'">Zurück zur Startseite</button>
+            <span class="success-message" type="text" th:text ="${successMessage} ? ${successMessage} : ${errorMessage}"></span>
+        </form>
+
+    </div>
+
+    <div class="box">
+        <h1 class="headerBox">Hier ist eine Übersicht aller angelegten Themen</h1>
+        <h2>Liste aller Themen</h2>
+        <table>
+            <tr>
+                <th>ID:</th>
+                <th>Themenname:</th>
+            </tr>
+            <tr th:each="topic: ${topics}">
+                <td th:text="${topic.getId()}">777</td>
+                <td th:text="${topic.getName()}">Test</td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+
+</body>
+</html>

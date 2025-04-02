@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/teachingClass.css">
+    <title>Unterrichtsklassen Übersicht</title>
+</head>
+<body>
+    <h1>Wähle eine Unterrichtsklasse</h1>
+    <div class="classroom" sec:authorize="hasRole('USER')">
+        <div th:if="${userTeachingClass == null}">
+            <table>
+                <tr >
+                    <th >ID:</th>
+                    <th>Klassenname:</th>
+                    <th>Themen:</th>
+                    <th>Aktionen</th>
+                </tr>
+                <tr th:each="teachingClass: ${teachingClasses}">
+                    <td th:text="${teachingClass.id}">1234</td>
+                    <td th:text="${teachingClass.name}">Test</td>
+                    <td th:if="${teachingClass.getTeachingClassTopics().size()} != 0">
+                        <p th:each="topic : ${teachingClass.getTeachingClassTopics()}" th:text="${topic.getTopic().getName()}"></p>
+                    </td>
+                    <td th:if="${teachingClass.getTeachingClassTopics().size()} == 0">
+                        Es gibt keine Themen.
+                    </td>
+                    <td>
+                        <form th:action="@{/join-teachingClass}" method="post" style="display: inline;"
+                              onsubmit="return confirm('Sind Sie sicher, dass Sie an diesem Klassenzimmer teilnehmen möchten?');">
+                            <input type="hidden" name="classId" th:value="${teachingClass.id}" />
+                            <button id="joinButton" type="submit" class="teilnehmen">Am Klassenzimmer teilnehmen</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div th:if="${userTeachingClass != null}">
+            <h2>Ihr aktueller Klassenzimmer: <span th:text="${userTeachingClass.name}"></span></h2>
+            <h3>Themen im Klassenzimmer:</h3>
+            <div th:each="topic : ${topicsInClass}">
+                <p th:text="${topic.getName()}"></p>
+            </div>
+            <form th:action="@{/leave-teachingClass}" method="post" style="display: inline;"
+                  onsubmit="return confirm('Sind Sie sicher, dass Sie dieses Klassenzimmer verlassen möchten?');">
+                <input type="hidden" name="classId" th:value="${teachingClass.id}" />
+                <button id="leaveButton" type="submit" class="btn btn-sm btn-danger">das Klassenzimmer verlassen</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="classroom" sec:authorize="hasRole('ADMIN')">
+        <h2>Neues Klassenzimmer erstellen</h2>
+        <form id="classroomForm" action="/createTeachingClass" method="post">
+            <label for="name">Name des Klassenzimmers:</label>
+            <input type="text" id="name" name="name" required><br>
+            <button id="editButton" type="submit">Klassenzimmer erstellen</button>
+            <span type="text" th:text ="${successMessage} ? ${successMessage} : ${errorMessage}"></span>
+            <input type="hidden" id="successMessage" th:value="${successMessage}">
+            <input type="hidden" id="errorMessage" th:value="${errorMessage}">
+        </form>
+        <hr>
+        <form th:action="@{/admin/teachingClass/distribute}" method="post" style="display: inline;"
+              onsubmit="return confirm('Sind Sie sicher, dass Sie die Themen zuteilen möchten?');">
+            <button id="editButton" type="submit" class="btn btn-sm btn-danger">Themen zuteilen</button>
+        </form>
+        <hr>
+        <h2>Liste aller Klassenzimmer</h2>
+        <table>
+            <tr >
+                <th >ID:</th>
+                <th>Klassenname:</th>
+                <th>Aktionen</th>
+            </tr>
+            <tr th:each="teachingClass: ${teachingClasses}">
+                <td th:text="${teachingClass.id}">1234</td>
+                <td th:text="${teachingClass.name}">Test</td>
+                <td>
+                    <a id="editButton" th:href="@{/admin/teachingClass/{id}(id=${teachingClass.id})}" class="btn btn-sm btn-primary">Bearbeiten</a>
+
+                    <form th:action="@{/teachingClass/delete}" method="post" style="display: inline;"
+                          onsubmit="return confirm('Sind Sie sicher, dass Sie diesen Klassenzimmer löschen möchten?');">
+                        <input type="hidden" name="userId" th:value="${teachingClass.id}" />
+                        <button id="deleteButton" type="submit" class="btn btn-sm btn-danger">Löschen</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <br><br>
+        <a th:href="@{/welcome}" class="btn btn-primary">Zurück zur Übersicht</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+body{
+    background-color: Gainsboro;
+    font-family: Trebuchet MS, sans-serif;
+    text-align: center;
+    display: grid;
+    place-items: center;
+}
+
+h1{
+    margin-top: 5%;
+    background-color: LightSlateGrey;
+    color: white;
+    padding: 2%;
+    width: 100%;
+}
+a{
+    width: 29%;
+    display: inline-block;
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: DarkSeaGreen;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    justify-content: center;
+}
+a:hover {
+    background-color: CadetBlue;
+}
+h2{
+    color: LightSlateGrey;
+}
+
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label{
+    display: block;
+    color: LightSlateGrey;
+    font-size: 16px;
+}
+
+textarea{
+    margin:10px;
+}
+
+button {
+    width: 30%;
+    padding: 5px;
+    margin: 10px 0;
+    background-color: DarkSeaGreen ;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+button:hover {
+    background-color: CadetBlue ;
+}
+
+th, td {
+    color: LightSlateGrey;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+}
+th {
+    background-color: #ecf0f1;
+}

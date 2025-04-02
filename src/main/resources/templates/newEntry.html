@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/newEntry.css">
+
+    <title>Texteintrag</title>
+</head>
+<body>
+<h1 th:text="${entry.id == null ? 'Erstelle einen neuen Eintrag' : 'Bearbeite den Eintrag'}"></h1>
+<div class="newEntry"></div>
+<form action="/newEntry" method="post">
+    <div>
+        <label for="Topic">Wählen Sie ein Thema zu welchem der Eintrag gehört</label><br>
+        <select name="Topics" id="topic">
+            <option th:each="topic : ${topics}"
+                    th:value="${topic.id}"
+                    th:text="${topic.name}"
+                    th:selected="${entry.topic != null and entry.topic.id.toString() == topic.id.toString()}"></option>
+        </select>
+    </div>
+    <textarea id="newTitle" name="Title" rows="1" cols="60" placeholder="Titel" th:text="${entry.title}" th:value="${entry.title}"></textarea>
+    <br>
+    <textarea id="newEntry" name="Entry" rows="6" cols="80" maxlength="255" th:text="${entry.content}" th:value="${entry.content}"></textarea>
+    <br>
+    <input type="hidden" name="EntryId" th:value="${entry.id}"/>
+    <button type="submit">Speichern</button>
+    <br><br>
+    <a th:href="@{/welcome}" >Zur Übersicht</a>
+</form>
+<div>
+
+</div>
+
+</body>
+</html>

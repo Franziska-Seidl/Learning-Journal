@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thema bearbeiten</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+  <h1>Thema bearbeiten</h1>
+
+  <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Thema bearbeiten</h2>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/topics/{id}/update(id=${topic.id})}" method="post" th:object="${topicsModel}">
+        <input type="hidden" name="topicsId" th:value="${topic.id}">
+        <div class="form-group">
+          <label for="name">Themenname</label>
+          <input type="text" class="form-control" id="name" name="name" th:value="${topic.name}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Speichern</button>
+        <a th:href="@{/topics}" class="btn btn-secondary">Abbrechen</a>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

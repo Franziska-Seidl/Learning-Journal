@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/entries.css">
+    <title>Übersicht aller Einträge</title>
+</head>
+<body>
+<h1>Hier ist eine Übersicht aller Einträge</h1>
+<div class="filterMitÜberschrift">
+    <p>Nach was möchtest du deine Einträge Filtern</p>
+    <div class="filter">
+    <form th:action="@{/entries}" th:object="${filter}" method="get">
+
+    <label for="topic">Themafilter:</label>
+    <select id="topic" name="topic">
+        <option value="" selected>---</option>
+        <option th:each="topic : ${topics}"
+                th:value="${topic.id}"
+                th:text="${topic.name}"></option>
+    </select>
+
+    <label for="person">Personenfilter:</label>
+    <select id="person" name="personType">
+        <option value="all" selected>---</option>
+        <option value="me">Mich</option>
+    </select>
+    <button id="anzeigen" type="submit">Anzeigen</button>
+    </form>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Titel</th>
+            <th>Inhalt</th>
+            <th>Thema</th>
+            <th>Datum</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="entry: ${entries}">
+            <td th:text="${entry.title}">Titel</td>
+            <td th:text="${entry.content}">Inhalt</td>
+            <td th:text="${entry.topic.name}">Thema</td>
+            <td th:text="${#temporals.format(entry.date, 'yyyy-MM-dd')}">Datum</td>
+            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')} or
+            ( ${#authorization.expression('hasRole(''USER'')')} and ${userId} == ${entry.user.id})">
+                <a id="editButton" th:href="@{/newEntry/{id}(id=${entry.id})}" >Bearbeiten</a>
+                <form th:action="@{/entry/delete}" method="post"
+                      onsubmit="return confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?');">
+                    <input type="hidden" name="entryId" th:value="${entry.id}" />
+                    <button id="deleteButton" type="submit">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <a th:href="@{/newEntry}">Neuen Eintrag erstellen</a>
+    <a th:href="@{/welcome}">Zurück zur Übersicht</a>
+</div>
+<div>
+</div>
+</body>
+</html>

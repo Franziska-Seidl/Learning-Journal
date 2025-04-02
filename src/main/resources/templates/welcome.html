@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="/css/welcome.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Page</title>
+</head>
+<body>
+    <h1>Willkommen im Learning Journal,
+        <span th:if="${user != null}" th:text="${user.firstName}"></span>
+        <span th:if="${user != null}" th:text="${user.lastName}"></span> !</h1>
+
+    <h2 sec:authorize="hasRole('USER')">
+    <span th:if="${user.assignedTopic != null}"
+          th:text="'Ihr Thema des Monats ist ' + ${user.assignedTopic.name}">
+    </span>
+        <span th:if="${user.assignedTopic == null}">
+        Noch kein Thema zugewiesen
+    </span>
+    </h2>
+
+    <p>Hier können Sie Ihre Notizen und Lerninhalte speichern und verwalten.</p>
+
+    <a th:href="@{/newEntry}">Neuen Eintrag erstellen</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/entries}">Einträge verwalten</a>
+    <a sec:authorize="hasRole('USER')" th:href="@{/entries}">Einträge anzeigen</a>
+    <a th:href="@{/teachingClass}">
+        <span th:text="${user.role == 'ADMIN'} ? 'Unterrichtsklassen verwalten' : 'Unterrichtsklasse'"></span>
+    </a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/topics}">Themen verwalten</a>
+    <a th:href="${user.role == 'ADMIN' ? '/admin/users' : '/profile'}">
+        <span th:text="${user.role == 'ADMIN'} ? 'Benutzerverwaltung' : 'Benutzerprofil'"></span>
+    </a>
+
+    <a th:href="@{/logout}">Ausloggen</a>
+
+</body>
+</html>

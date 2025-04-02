@@ -1,0 +1,100 @@
+body{
+  background-color: Gainsboro;
+  font-family: Trebuchet MS, sans-serif;
+  text-align: center;
+  color: white;
+  display: grid;
+  place-items: center;
+}
+h1{
+  margin-top: 5%;
+  margin-bottom: 8%;
+  background-color: LightSlateGrey;
+  color: white;
+  padding: 2%;
+  width: 100%;
+}
+.container{
+   width: 310px;
+   height: 485px;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   background-color: Gainsboro;
+}
+
+form {
+  width: 200px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  padding: 130px 55px 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.loginTitle {
+  font-size: 30px;
+  color:white;
+  line-height: 1.2;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  top: 0;
+  left: 0;
+  background-color: LightSlateGrey;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  text-align: center;
+  padding-top: 25px;
+  padding-bottom: 15px;
+  font-weight: bold;
+}
+
+input[type=email], input[type=password] {
+  width: 100%;
+  margin: 5px;
+  padding:7px;
+  background-color: #ebebeb !important;
+  border-radius: 10px;
+  border: 1px solid darkgrey;
+}
+input[type=submit] {
+  width: 80%;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 35px;
+  background-color: LightSlateGrey ;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: Ubuntu-Bold, sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+input[type=submit]:hover {
+  background-color: darkseagreen ;
+}
+
+.containerLink{
+  padding: 5px;
+  padding-bottom: 1px;
+  font-size: 10px;
+  font-family: Ubuntu-Bold, sans-serif;
+  text-transform: uppercase;
+}
+a{
+  font-weight: 1000;
+  color:LightSlateGrey;
+  text-decoration: none;
+}
+
+a:hover{
+  color: black;
+}
